@@ -1,9 +1,6 @@
 # editor
 /.idea
 
-#configs
-.husky/_
-
 #rust
 /target
 **/*.rs.bk
@@ -27,3 +24,5 @@ yarn-error.log*
 
 #dev
 /dist
+.husky/_
+.env
