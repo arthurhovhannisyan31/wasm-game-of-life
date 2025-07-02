@@ -1,0 +1,57 @@
+name: Validate Code
+on:
+  push:
+    branches:
+      - '*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust-code-validation:
+    name: Rust validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          cargo update
+      - name: Validate code
+        run: |
+          cargo check --quiet
+      - name: Validate linters
+        run: |
+          ./configs/scripts/cargo-fmt.sh
+          cargo clippy --all-features --all-targets --quiet
+
+
+#  js-code-validation:
+#    env:
+#      HUSKY: 0
+#    name: JS validation
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#      - name: Setup NodeJS
+#        uses: ./.github/actions/setup-node
+#      - name: Restore dependencies
+#        id: restore-dependencies
+#        uses: actions/cache@v4
+#        with:
+#          path: node_modules
+#          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-yarn-
+#      - name: Install Packages
+#        if: ${{ steps.restore-dependencies.outputs.cache-hit != 'true' }}
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+#        run: yarn
+#      - name: Validate types
+#        run: yarn types
+#      - name: Validate linters
+#        run: yarn lint
