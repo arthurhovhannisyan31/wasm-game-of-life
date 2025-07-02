@@ -1,0 +1,16 @@
+name: "Setup NodeJS"
+description: "Setup files required for build"
+runs:
+  using: "composite"
+  steps:
+    - name: Install NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.9.0
+    - name: Enable yarn
+      shell: bash
+      run: corepack enable
+    - name: Setup SW files
+      run: ./configs/scripts/setup-sw.sh
+      shell: bash
+
