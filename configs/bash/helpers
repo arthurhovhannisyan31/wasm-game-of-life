@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "$(dirname "$0")/configs/colors"
+. "./configs/bash/colors"
 
 validate () {
   for COMMAND in "$@"; do
