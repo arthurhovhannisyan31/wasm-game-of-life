@@ -1,0 +1,37 @@
+{
+  "extends": "./configs/typescript/tsconfig.rules.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "baseUrl": "web",
+    "rootDir": ".",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "webworker"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "typeRoots": [
+      "node_modules/@types",
+      "./web/typings"
+    ]
+  },
+  "include": [
+    "web",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/.*.js",
+    // needed for config files with leading dot
+    "**/*.js",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+  ],
+  "types": [
+    "webpack-env",
+    "node"
+  ]
+}
