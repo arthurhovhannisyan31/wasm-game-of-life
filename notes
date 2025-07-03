@@ -1,0 +1,3 @@
+- add wasm-pack tests to CI
+- add test files from wasm-pack-template
+wasm-pack test --headless --firefox
