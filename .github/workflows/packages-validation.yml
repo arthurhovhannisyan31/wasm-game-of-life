@@ -15,8 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - run: rustup toolchain install stable --profile minimal
-      - uses: Swatinem/rust-cache@v2
+      - name: Restore dependencies
+        id: restore-dependencies
+        uses: Swatinem/rust-cache@v2
         with:
+          prefix-key: "package-audit"
+          shared-key: "-"
           key: ${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Cargo audit
         run: |
