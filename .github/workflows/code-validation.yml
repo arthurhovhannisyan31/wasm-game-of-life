@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -f
           cargo update
       - name: Validate code
         run: |
@@ -26,7 +26,10 @@ jobs:
         run: |
           ./configs/scripts/cargo-fmt.sh
           cargo clippy --all-features --all-targets --quiet
-
+      - name: Validate tests
+        run: |
+          wasm-pack build --quiet --out-dir wasm-pkg --release
+          wasm-pack test --chrome --firefox --headless
 
 #  js-code-validation:
 #    env:
