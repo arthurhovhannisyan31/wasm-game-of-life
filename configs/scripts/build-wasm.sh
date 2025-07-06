@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO Delete since GH Actions dependencies are restored from cache, check Vercel deployment caching
 if ! which wasm-pack; then
   echo Init rustup
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -sSf | sh -s -- -y

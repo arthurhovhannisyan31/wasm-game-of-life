@@ -5,14 +5,17 @@
 ![Vercel](https://vercelbadge.vercel.app/api/arthurhovhannisyan31/wasm-game-of-life?style=for-the-badge)
 
 ## Overview
+
 ___
-Web assembly implementation of `game of life` project.
+...
 
 ## Credits
+
 ___
-Based on [Rust and WebAssembly](https://rustwasm.github.io/docs/book/introduction.html) book. 
+Based on [Rust and WebAssembly](https://rustwasm.github.io/docs/book/introduction.html) book.
 
 ## License
+
 ___
 Licensed under either of at your option.
 
