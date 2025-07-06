@@ -1,0 +1,32 @@
+{
+  "3dffe3f2519a1177436f.204.chunk.js": {
+    "path": "3dffe3f2519a1177436f.204.chunk.js",
+    "size": 1812,
+    "prefetch": false
+  },
+  "4ca79462b298e2156934.main.js.LICENSE.txt": {
+    "path": "4ca79462b298e2156934.main.js.LICENSE.txt",
+    "size": 1449,
+    "prefetch": false
+  },
+  "b9e18161a4cb12d19e46.module.wasm": {
+    "path": "b9e18161a4cb12d19e46.module.wasm",
+    "size": 20620,
+    "prefetch": false
+  },
+  "favicon.ico": {
+    "path": "favicon.ico",
+    "size": 318,
+    "prefetch": false
+  },
+  "main.css": {
+    "path": "e67e74fbace95ace9367.main.css",
+    "size": 962,
+    "prefetch": false
+  },
+  "main.js": {
+    "path": "4ca79462b298e2156934.main.js",
+    "size": 280807,
+    "prefetch": false
+  }
+}
