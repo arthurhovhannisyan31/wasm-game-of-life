@@ -6,32 +6,48 @@ import { Layout } from "components/layout";
 import { useInitSW } from "hooks/useInitSW";
 import { useInitWasm } from "hooks/useInitWasm";
 
+import { CELL_SIZE } from "./constants";
+import { drawCells, drawGrid } from "./helpers";
 import { containerStyles, contentStyles } from "./styles";
 import { Universe } from "../../../wasm-pkg";
 
 export const App = () => {
-  const wasm = useInitWasm();
+  const wasmConfig = useInitWasm();
+
   const [universe, setUniverse] = useState<Universe>();
 
-  const preContainerRef = useRef<HTMLPreElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const renderLoop = useCallback(() => {
-    if (preContainerRef.current && universe) {
-      preContainerRef.current.textContent = universe.render();
+    if (canvasRef.current && universe && wasmConfig?.memory) {
       universe.tick();
+
+      const ctx = canvasRef.current.getContext("2d");
+
+      if (!ctx) return;
+
+      drawGrid(ctx, universe.width(), universe.height());
+      drawCells(ctx, universe.cells(), wasmConfig.memory, universe.width(), universe.height());
     }
 
     requestAnimationFrame(renderLoop);
-  }, [universe]);
+  }, [universe, wasmConfig?.memory]);
 
   const handleCanvasReset = () => {
-    setUniverse(wasm?.Universe.new());
+    setUniverse(wasmConfig?.module?.Universe.new());
   };
 
   useEffect(() => {
-    if (wasm && !universe) {
-      setUniverse(wasm.Universe.new());
+    if (canvasRef.current && universe) {
+      canvasRef.current.height = (CELL_SIZE + 1) * universe.height() + 1;
+      canvasRef.current.width = (CELL_SIZE + 1) * universe.width() + 1;
     }
-  }, [universe, wasm]);
+  }, [universe]);
+
+  useEffect(() => {
+    if (wasmConfig?.module && !universe) {
+      setUniverse(wasmConfig?.module.Universe.new());
+    }
+  }, [universe, wasmConfig?.module]);
 
   useEffect(() => {
     requestAnimationFrame(renderLoop);
@@ -43,10 +59,7 @@ export const App = () => {
     <Layout>
       <Box sx={containerStyles}>
         <Box sx={contentStyles}>
-          <pre ref={preContainerRef}>
-            hello
-            kitty
-          </pre>
+          <canvas ref={canvasRef}></canvas>
         </Box>
         <Button onClick={handleCanvasReset}>
           Restart

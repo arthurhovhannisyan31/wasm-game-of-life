@@ -1,5 +1,4 @@
 mod utils;
-use std::collections::hash_set::Union;
 use std::fmt;
 use wasm_bindgen::prelude::*;
 
@@ -50,7 +49,6 @@ impl Universe {
   pub fn new() -> Universe {
     let width = 64;
     let height = 64;
-    let mut random_number = 0;
 
     let cells = (0..width * height)
       .map(|i| {
