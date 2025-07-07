@@ -1,3 +1,4 @@
+extern crate js_sys;
 mod utils;
 use std::fmt;
 use wasm_bindgen::prelude::*;
@@ -42,6 +43,10 @@ impl Universe {
 
     count
   }
+  fn set_value(&self, row: u32, column: u32, value: Cell) {
+    // TODO
+    unimplemented!("Add cell value set from user click");
+  }
 }
 
 #[wasm_bindgen]
@@ -49,10 +54,11 @@ impl Universe {
   pub fn new() -> Universe {
     let width = 64;
     let height = 64;
+    let rand = js_sys::Math::random;
 
     let cells = (0..width * height)
       .map(|i| {
-        if i % 2 == 0 || i % 7 == 0 {
+        if rand() < 0.5 {
           Cell::Alive
         } else {
           Cell::Dead
