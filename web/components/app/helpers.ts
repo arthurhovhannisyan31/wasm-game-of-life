@@ -41,8 +41,6 @@ export const drawCells = (
 
   ctx.beginPath();
 
-  console.log(cells);
-
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
       const idx = getIndex(row, width, col);

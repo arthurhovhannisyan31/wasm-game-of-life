@@ -43,10 +43,6 @@ impl Universe {
 
     count
   }
-  fn set_value(&self, row: u32, column: u32, value: Cell) {
-    // TODO
-    unimplemented!("Add cell value set from user click");
-  }
 }
 
 #[wasm_bindgen]
@@ -58,7 +54,7 @@ impl Universe {
 
     let cells = (0..width * height)
       .map(|i| {
-        if rand() < 0.5 {
+        if (0.2..0.5).contains(&rand()) {
           Cell::Alive
         } else {
           Cell::Dead
@@ -111,6 +107,14 @@ impl Universe {
   }
   pub fn cells(&self) -> *const Cell {
     self.cells.as_ptr()
+  }
+  pub fn toggle_cell(&mut self, col: u32, row: u32) {
+    let idx = self.get_index(row, col);
+
+    self.cells[idx] = match self.cells[idx] {
+      Cell::Dead => Cell::Alive,
+      Cell::Alive => Cell::Dead,
+    };
   }
 }
 

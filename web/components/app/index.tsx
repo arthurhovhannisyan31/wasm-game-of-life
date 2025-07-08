@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { Box, Button } from "@mui/material";
 
@@ -11,6 +11,8 @@ import { drawCells, drawGrid } from "./helpers";
 import { containerStyles, contentStyles } from "./styles";
 import { Universe } from "../../../wasm-pkg";
 
+let count = 0;
+
 export const App = () => {
   const wasmConfig = useInitWasm();
 
@@ -18,7 +20,12 @@ export const App = () => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const renderLoop = useCallback(() => {
-    if (canvasRef.current && universe && wasmConfig?.memory) {
+    count++;
+    console.log(count);
+
+    if (canvasRef.current && universe && wasmConfig?.memory && count < 10) {
+      count = 0;
+
       universe.tick();
 
       const ctx = canvasRef.current.getContext("2d");
@@ -34,6 +41,21 @@ export const App = () => {
 
   const handleCanvasReset = () => {
     setUniverse(wasmConfig?.module?.Universe.new());
+  };
+
+  const clickHandler = (e: MouseEvent) => {
+    if (!canvasRef.current || !universe) return;
+
+    const { top, left } = canvasRef.current.getBoundingClientRect();
+    const { clientY, clientX } = e;
+
+    const x = clientX - left;
+    const y = clientY - top;
+
+    const col = Math.floor(x / (CELL_SIZE + 1));
+    const row = Math.floor(y / (CELL_SIZE + 1));
+
+    universe.toggle_cell(col, row);
   };
 
   useEffect(() => {
@@ -59,7 +81,11 @@ export const App = () => {
     <Layout>
       <Box sx={containerStyles}>
         <Box sx={contentStyles}>
-          <canvas ref={canvasRef}></canvas>
+          <canvas
+            onClick={clickHandler}
+            ref={canvasRef}
+          >
+          </canvas>
         </Box>
         <Button onClick={handleCanvasReset}>
           Restart
