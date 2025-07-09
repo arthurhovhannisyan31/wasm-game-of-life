@@ -8,29 +8,38 @@ import { useInitWasm } from "hooks/useInitWasm";
 
 import { CELL_SIZE } from "./constants";
 import { drawCells, drawGrid } from "./helpers";
-import { containerStyles, contentStyles } from "./styles";
+import { containerStyles, contentStyles, controlsContainerStyles } from "./styles";
 import { Universe } from "../../../wasm-pkg";
 
 export const App = () => {
   const wasmConfig = useInitWasm();
 
   const [universe, setUniverse] = useState<Universe>();
+  const [play, setPlay] = useState(false);
+  const animationId = useRef<number>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const flushCanvas = useCallback(() => {
+    if (!canvasRef.current || !universe || !wasmConfig?.memory) {
+      return;
+    }
+    const ctx = canvasRef.current.getContext("2d");
+
+    if (!ctx) return;
+
+    drawGrid(ctx, universe.width(), universe.height());
+    drawCells(ctx, universe.cells(), wasmConfig.memory, universe.width(), universe.height());
+  }, [universe, wasmConfig?.memory]);
+
   const renderLoop = useCallback(() => {
     if (canvasRef.current && universe && wasmConfig?.memory) {
       universe.tick();
 
-      const ctx = canvasRef.current.getContext("2d");
-
-      if (!ctx) return;
-
-      drawGrid(ctx, universe.width(), universe.height());
-      drawCells(ctx, universe.cells(), wasmConfig.memory, universe.width(), universe.height());
+      flushCanvas();
     }
 
-    requestAnimationFrame(renderLoop);
-  }, [universe, wasmConfig?.memory]);
+    animationId.current = requestAnimationFrame(renderLoop);
+  }, [flushCanvas, universe, wasmConfig?.memory]);
 
   const handleCanvasReset = () => {
     setUniverse(wasmConfig?.module?.Universe.new());
@@ -39,17 +48,36 @@ export const App = () => {
   const clickHandler = (e: MouseEvent) => {
     if (!canvasRef.current || !universe) return;
 
-    const { top, left } = canvasRef.current.getBoundingClientRect();
-    const { clientY, clientX } = e;
+    const boundingRect = canvasRef.current.getBoundingClientRect();
 
-    const x = clientX - left;
-    const y = clientY - top;
+    const scaleX = canvasRef.current.width / boundingRect.width;
+    const scaleY = canvasRef.current.height / boundingRect.height;
 
-    const col = Math.floor(x / (CELL_SIZE + 1));
-    const row = Math.floor(y / (CELL_SIZE + 1));
+    const canvasLeft = (e.clientX - boundingRect.left) * scaleX;
+    const canvasTop = (e.clientY - boundingRect.top) * scaleY;
+
+    const row = Math.floor(canvasTop / (CELL_SIZE + 1));
+    const col = Math.floor(canvasLeft / (CELL_SIZE + 1));
 
     universe.toggle_cell(col, row);
+
+    flushCanvas();
   };
+
+  const start = () => {
+    setPlay(true);
+    renderLoop();
+  };
+
+  const pause = () => {
+    setPlay(false);
+    if (animationId.current) {
+      cancelAnimationFrame(animationId.current);
+      animationId.current = null;
+    }
+  };
+
+  const togglePlay = () => play ? pause() : start();
 
   useEffect(() => {
     if (canvasRef.current && universe) {
@@ -64,15 +92,25 @@ export const App = () => {
     }
   }, [universe, wasmConfig?.module]);
 
-  useEffect(() => {
-    requestAnimationFrame(renderLoop);
-  }, [renderLoop]);
-
   useInitSW();
 
   return (
     <Layout>
       <Box sx={containerStyles}>
+        <Box sx={controlsContainerStyles}>
+          <Button
+            onClick={togglePlay}
+            variant="outlined"
+          >
+            {play ? "Stop" : "Play"}
+          </Button>
+          <Button
+            onClick={handleCanvasReset}
+            variant="outlined"
+          >
+            Restart
+          </Button>
+        </Box>
         <Box sx={contentStyles}>
           <canvas
             onClick={clickHandler}
@@ -80,9 +118,6 @@ export const App = () => {
           >
           </canvas>
         </Box>
-        <Button onClick={handleCanvasReset}>
-          Restart
-        </Button>
       </Box>
     </Layout>
   );
