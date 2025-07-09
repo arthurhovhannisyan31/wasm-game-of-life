@@ -11,8 +11,6 @@ import { drawCells, drawGrid } from "./helpers";
 import { containerStyles, contentStyles } from "./styles";
 import { Universe } from "../../../wasm-pkg";
 
-let count = 0;
-
 export const App = () => {
   const wasmConfig = useInitWasm();
 
@@ -20,12 +18,7 @@ export const App = () => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const renderLoop = useCallback(() => {
-    count++;
-    console.log(count);
-
-    if (canvasRef.current && universe && wasmConfig?.memory && count < 10) {
-      count = 0;
-
+    if (canvasRef.current && universe && wasmConfig?.memory) {
       universe.tick();
 
       const ctx = canvasRef.current.getContext("2d");
