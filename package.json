@@ -9,14 +9,15 @@
     "build:rs": "configs/scripts/build-wasm.sh",
     "build:fe": "configs/scripts/build-web.sh",
     "dev": "webpack serve --config configs/webpack/webpack.dev.js",
-    "watch:rs": "nodemon --polling-interval 1000 -e rs --exec \"yarn build:rs\"",
+    "watch:rs": "nodemon --polling-interval 1000 -e rs --exec \"yarn build:rs --debug\"",
     "serve": "nodemon -r dotenv/config --config configs/nodemon-prod.json server.js",
     "prepare": "corepack install && husky",
     "lint": "yarn eslint '**/*.{js,ts,tsx}' --cache --quiet",
     "lint:warn": "yarn lint --max-warnings 100",
     "lint:staged": "./configs/scripts/lint-staged.sh",
     "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit",
-    "cargo-docs": "cargo doc --open --no-deps"
+    "cargo-docs": "cargo doc --open --no-deps",
+    "test:rs": "wasm-pack test --chrome --headless"
   },
   "dependencies": {
     "@arthurhovhannisyan31/simple-service-worker": "^1.0.6",
