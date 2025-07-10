@@ -143,6 +143,20 @@ impl Universe {
     self.height = height;
     self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
   }
+  pub fn set_glider(&mut self, col: u32, row: u32) {
+    let glider_shape: Vec<(u32, u32)> = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+      .iter()
+      .map(|(x, y)| ((col + y) % self.width, (row + x) % self.height))
+      .collect();
+
+    println!("{:?}", glider_shape);
+
+    glider_shape.into_iter().for_each(|(x, y)| {
+      let idx = self.get_index(y, x);
+
+      self.cells[idx] = Cell::Alive;
+    });
+  }
 }
 
 impl Default for Universe {
