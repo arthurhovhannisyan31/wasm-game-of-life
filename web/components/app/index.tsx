@@ -1,25 +1,37 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { Box, Button } from "@mui/material";
+import Slider from "@mui/material/Slider";
 
 import { Layout } from "components/layout";
 import { useInitSW } from "hooks/useInitSW";
 import { useInitWasm } from "hooks/useInitWasm";
 
-import { CELL_SIZE } from "./constants";
+import { CELL_SIZE, RENDER_PER_SECOND_RATE } from "./constants";
 import { drawCells, drawGrid } from "./helpers";
-import { containerStyles, contentStyles, controlsContainerStyles } from "./styles";
+import {
+  containerStyles,
+  contentStyles,
+  controlsContainerStyles, sliderMarks,
+  sliderStyles
+} from "./styles";
 import { Universe } from "../../../wasm-pkg";
+
+let count = 0;
+/* requestAnimationFrame catches the old version of the function and avoids new */
+let rpsValue = RENDER_PER_SECOND_RATE;
 
 export const App = () => {
   const wasmConfig = useInitWasm();
 
   const [universe, setUniverse] = useState<Universe>();
   const [play, setPlay] = useState(false);
-  const animationId = useRef<number>(null);
+  const [rps, setRps] = useState(rpsValue);
 
+  const animationId = useRef<number>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const flushCanvas = useCallback(() => {
+
+  const handleDrawGrid = useCallback(() => {
     if (!canvasRef.current || !universe || !wasmConfig?.memory) {
       return;
     }
@@ -28,18 +40,34 @@ export const App = () => {
     if (!ctx) return;
 
     drawGrid(ctx, universe.width(), universe.height());
+  }, [universe, wasmConfig?.memory]);
+
+  const handleDrawCells = useCallback(() => {
+    if (!canvasRef.current || !universe || !wasmConfig?.memory) {
+      return;
+    }
+    const ctx = canvasRef.current.getContext("2d");
+
+    if (!ctx) return;
+
     drawCells(ctx, universe.cells(), wasmConfig.memory, universe.width(), universe.height());
   }, [universe, wasmConfig?.memory]);
 
   const renderLoop = useCallback(() => {
-    if (canvasRef.current && universe && wasmConfig?.memory) {
+    count++;
+    const skipCount = Math.ceil(RENDER_PER_SECOND_RATE / rpsValue);
+
+    if (universe && count >= skipCount) {
+      count = 0;
+
       universe.tick();
 
-      flushCanvas();
+      handleDrawGrid();
+      handleDrawCells();
     }
 
     animationId.current = requestAnimationFrame(renderLoop);
-  }, [flushCanvas, universe, wasmConfig?.memory]);
+  }, [handleDrawCells, handleDrawGrid, universe]);
 
   const handleCanvasReset = () => {
     setUniverse(wasmConfig?.module?.Universe.new());
@@ -61,7 +89,7 @@ export const App = () => {
 
     universe.toggle_cell(col, row);
 
-    flushCanvas();
+    handleDrawCells();
   };
 
   const start = () => {
@@ -79,6 +107,14 @@ export const App = () => {
 
   const togglePlay = () => play ? pause() : start();
 
+  const handleRpsChange = (
+    _: Event,
+    newValue: number
+  ) => {
+    setRps(newValue);
+    rpsValue = newValue;
+  };
+
   useEffect(() => {
     if (canvasRef.current && universe) {
       canvasRef.current.height = (CELL_SIZE + 1) * universe.height() + 1;
@@ -92,6 +128,19 @@ export const App = () => {
     }
   }, [universe, wasmConfig?.module]);
 
+  useEffect(() => {
+    handleDrawGrid();
+    handleDrawCells();
+  }, [handleDrawGrid, handleDrawCells]);
+
+  useEffect(() => {
+    return () => {
+      if (animationId.current) {
+        cancelAnimationFrame(animationId.current);
+      }
+    };
+  }, []);
+
   useInitSW();
 
   return (
@@ -101,9 +150,20 @@ export const App = () => {
           <Button
             onClick={togglePlay}
             variant="outlined"
+            sx={{ width: "100px" }}
           >
             {play ? "Stop" : "Play"}
           </Button>
+          <Slider
+            min={0}
+            max={60}
+            step={null}
+            value={rps}
+            onChange={handleRpsChange}
+            sx={sliderStyles}
+            marks={sliderMarks}
+            valueLabelDisplay="auto"
+          />
           <Button
             onClick={handleCanvasReset}
             variant="outlined"
