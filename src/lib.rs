@@ -63,16 +63,21 @@ impl Universe {
 
 #[wasm_bindgen]
 impl Universe {
-  pub fn new() -> Universe {
+  pub fn new(empty: Option<bool>) -> Universe {
     set_panic_hook();
 
-    let width = 40;
-    let height = 40;
+    let empty = empty.unwrap_or(false);
+    let width = 50;
+    let height = 50;
     let rand = js_sys::Math::random;
     let mut count = 0;
 
     let cells = (0..width * height)
       .map(|_| {
+        if empty {
+          return Cell::Dead;
+        }
+
         if (0.2..0.5).contains(&rand()) {
           count += 1;
           Cell::Alive
@@ -149,8 +154,6 @@ impl Universe {
       .map(|(x, y)| ((col + y) % self.width, (row + x) % self.height))
       .collect();
 
-    println!("{:?}", glider_shape);
-
     glider_shape.into_iter().for_each(|(x, y)| {
       let idx = self.get_index(y, x);
 
@@ -161,7 +164,7 @@ impl Universe {
 
 impl Default for Universe {
   fn default() -> Self {
-    Self::new()
+    Self::new(Some(false))
   }
 }
 

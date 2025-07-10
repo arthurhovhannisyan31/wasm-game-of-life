@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type ChangeEvent } from "react";
 
-import { Box, Button } from "@mui/material";
-import Slider from "@mui/material/Slider";
+import { Box, Button, Stack, Slider, Typography, Alert, FormControlLabel, Checkbox } from "@mui/material";
 
 import { Layout } from "components/layout";
 import { useInitSW } from "hooks/useInitSW";
@@ -10,9 +9,10 @@ import { useInitWasm } from "hooks/useInitWasm";
 import { CELL_SIZE, RENDER_PER_SECOND_RATE } from "./constants";
 import { drawCells, drawGrid } from "./helpers";
 import {
+  buttonsContainerStyles,
   containerStyles,
   contentStyles,
-  controlsContainerStyles, sliderMarks,
+  controlsContainerStyles, emptyCheckboxContainerStyles, sliderMarks,
   sliderStyles
 } from "./styles";
 import { Universe } from "../../../wasm-pkg";
@@ -27,6 +27,7 @@ export const App = () => {
   const [universe, setUniverse] = useState<Universe>();
   const [play, setPlay] = useState(false);
   const [rps, setRps] = useState(rpsValue);
+  const [empty, setEmpty] = useState(false);
 
   const animationId = useRef<number>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -69,11 +70,9 @@ export const App = () => {
     animationId.current = requestAnimationFrame(renderLoop);
   }, [handleDrawCells, handleDrawGrid, universe]);
 
-  const handleCanvasReset = () => {
-    setUniverse(wasmConfig?.module?.Universe.new());
-  };
-
-  const clickHandler = (e: MouseEvent) => {
+  const clickHandler = (
+    e: MouseEvent
+  ) => {
     if (!canvasRef.current || !universe) return;
 
     const boundingRect = canvasRef.current.getBoundingClientRect();
@@ -87,9 +86,23 @@ export const App = () => {
     const row = Math.floor(canvasTop / (CELL_SIZE + 1));
     const col = Math.floor(canvasLeft / (CELL_SIZE + 1));
 
-    universe.toggle_cell(col, row);
+    if (e.shiftKey) {
+      universe.set_glider(col, row);
+    } else {
+      universe.toggle_cell(col, row);
+    }
 
     handleDrawCells();
+  };
+
+  const handleCanvasReset = () => {
+    setPlay(false);
+
+    if (animationId.current) {
+      cancelAnimationFrame(animationId.current);
+    }
+
+    setUniverse(wasmConfig?.module?.Universe.new(empty));
   };
 
   const start = () => {
@@ -115,6 +128,11 @@ export const App = () => {
     rpsValue = newValue;
   };
 
+  const handleChangeCheckbox = (
+    event: ChangeEvent<HTMLInputElement>) => {
+    setEmpty(event.target.checked);
+  };
+
   useEffect(() => {
     if (canvasRef.current && universe) {
       canvasRef.current.height = (CELL_SIZE + 1) * universe.height() + 1;
@@ -126,7 +144,7 @@ export const App = () => {
     if (wasmConfig?.module && !universe) {
       setUniverse(wasmConfig?.module.Universe.new());
     }
-  }, [universe, wasmConfig?.module]);
+  }, [empty, universe, wasmConfig?.module]);
 
   useEffect(() => {
     handleDrawGrid();
@@ -147,29 +165,58 @@ export const App = () => {
     <Layout>
       <Box sx={containerStyles}>
         <Box sx={controlsContainerStyles}>
-          <Button
-            onClick={togglePlay}
-            variant="outlined"
-            sx={{ width: "100px" }}
-          >
-            {play ? "Stop" : "Play"}
-          </Button>
-          <Slider
-            min={0}
-            max={60}
-            step={null}
-            value={rps}
-            onChange={handleRpsChange}
-            sx={sliderStyles}
-            marks={sliderMarks}
-            valueLabelDisplay="auto"
+          <Box sx={buttonsContainerStyles}>
+            <Button
+              onClick={togglePlay}
+              variant="contained"
+              sx={{ width: "100px" }}
+              color="success"
+            >
+              {play ? "Stop" : "Play"}
+            </Button>
+            <Button
+              onClick={handleCanvasReset}
+              variant="contained"
+              color="info"
+            >
+              Reset
+            </Button>
+          </Box>
+          <Stack alignItems="center">
+            <Typography gutterBottom>
+              Renders per second rate
+            </Typography>
+            <Slider
+              min={0}
+              max={60}
+              step={null}
+              value={rps}
+              onChange={handleRpsChange}
+              sx={sliderStyles}
+              marks={sliderMarks}
+              valueLabelDisplay="auto"
+            />
+          </Stack>
+          <FormControlLabel
+            style={emptyCheckboxContainerStyles}
+            control={(
+              <Checkbox
+                value={empty}
+                onChange={handleChangeCheckbox}
+              />
+            )}
+            label="Empty canvas"
           />
-          <Button
-            onClick={handleCanvasReset}
-            variant="outlined"
-          >
-            Restart
-          </Button>
+          <Alert severity="info">
+            Use `shift + click` to land a
+            <a
+              href="https://en.wikipedia.org/wiki/Glider_(Conway%27s_Game_of_Life)"
+              target="_blank"
+            >
+              {" "}
+              glider
+            </a>
+          </Alert>
         </Box>
         <Box sx={contentStyles}>
           <canvas

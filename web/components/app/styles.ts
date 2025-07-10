@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 import type { SxProps } from "@mui/material";
 import type { Mark } from "@mui/material/Slider/useSlider.types";
 
@@ -21,8 +23,15 @@ export const contentStyles: SxProps = {
 
 export const controlsContainerStyles: SxProps = {
   display: "flex",
-  width: "100%",
+  flexDirection: "column",
   justifyContent: "space-between",
+  gap: "16px",
+};
+
+export const buttonsContainerStyles: SxProps = {
+  display: "flex",
+  justifyContent: "center",
+  gap: "16px"
 };
 
 export const sliderStyles: SxProps = {
@@ -48,3 +57,8 @@ export const sliderMarks: Mark[] = [{
   value: 60,
   label: "60"
 }];
+
+export const emptyCheckboxContainerStyles: CSSProperties = {
+  display: "flex",
+  justifyContent: "center"
+};
