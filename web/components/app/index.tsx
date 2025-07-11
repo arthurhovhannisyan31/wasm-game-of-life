@@ -13,7 +13,6 @@ import {
   contentStyles,
   controlsContainerStyles,
   emptyCheckboxContainerStyles,
-  fpsStyle,
   sliderMarks,
   sliderStyles
 } from "./styles";
@@ -189,23 +188,26 @@ export const App = () => {
             </Button>
 
           </Box>
-          <Box display="flex" gap="16px" justifyContent="space-between">
-            <Typography sx={fpsStyle}>
+          <Box display="flex" gap="8px" justifyContent="space-between">
+            <Typography>
               FPS:
+            </Typography>
+            <Typography>
+              Current:
               {" "}
               {fpsProps.latest}
             </Typography>
-            <Typography sx={fpsStyle}>
-              Average:
+            <Typography>
+              Avg:
               {" "}
               {fpsProps.avg}
             </Typography>
-            <Typography sx={fpsStyle}>
+            <Typography>
               Min:
               {" "}
               {fpsProps.min}
             </Typography>
-            <Typography sx={fpsStyle}>
+            <Typography>
               Max:
               {" "}
               {fpsProps.max}

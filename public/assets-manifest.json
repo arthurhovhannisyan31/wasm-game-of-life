@@ -1,17 +1,12 @@
 {
-  "3dffe3f2519a1177436f.204.chunk.js": {
-    "path": "3dffe3f2519a1177436f.204.chunk.js",
-    "size": 1812,
+  "00ac19f6684e84b42cf0.main.js.LICENSE.txt": {
+    "path": "00ac19f6684e84b42cf0.main.js.LICENSE.txt",
+    "size": 1696,
     "prefetch": false
   },
-  "4ca79462b298e2156934.main.js.LICENSE.txt": {
-    "path": "4ca79462b298e2156934.main.js.LICENSE.txt",
-    "size": 1449,
-    "prefetch": false
-  },
-  "b9e18161a4cb12d19e46.module.wasm": {
-    "path": "b9e18161a4cb12d19e46.module.wasm",
-    "size": 20620,
+  "57bed49b04d6050291d1.module.wasm": {
+    "path": "57bed49b04d6050291d1.module.wasm",
+    "size": 29811,
     "prefetch": false
   },
   "favicon.ico": {
@@ -25,8 +20,8 @@
     "prefetch": false
   },
   "main.js": {
-    "path": "4ca79462b298e2156934.main.js",
-    "size": 280807,
+    "path": "00ac19f6684e84b42cf0.main.js",
+    "size": 377736,
     "prefetch": false
   }
 }
