@@ -60,3 +60,62 @@ export const drawCells = (
 
   ctx.stroke();
 };
+
+export interface FPSProps {
+  latest: number;
+  avg: number;
+  min: number;
+  max: number;
+}
+
+export const fpsPropsInitState: FPSProps = {
+  latest: 0,
+  avg: 0,
+  min: 0,
+  max: 0,
+};
+
+export class FPS {
+  private frames: number[] = [];
+  private lastFrameTimeStamp = performance.now();
+
+  render(): FPSProps {
+    const now = performance.now();
+    const delta = now - this.lastFrameTimeStamp;
+    this.lastFrameTimeStamp = now;
+    const fps = 1 / delta * 1000;
+
+    this.frames.push(fps);
+
+    if (this.frames.length > 100) {
+      this.frames.shift();
+    }
+
+    const {
+      min,
+      max,
+      sum,
+    } = this.frames.reduce((
+      acc,
+      val
+    ) => {
+      acc.sum += val;
+      acc.min = Math.min(val, acc.min);
+      acc.max = Math.max(val, acc.max);
+
+      return acc;
+    }, {
+      min: Infinity,
+      max: -Infinity,
+      sum: 0
+    });
+    const mean = sum / this.frames.length;
+
+    return {
+      latest: Math.round(fps),
+      avg: Math.round(mean),
+      min: Math.round(min),
+      max: Math.round(max)
+    };
+  }
+}

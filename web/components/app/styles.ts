@@ -62,3 +62,9 @@ export const emptyCheckboxContainerStyles: CSSProperties = {
   display: "flex",
   justifyContent: "center"
 };
+
+export const fpsStyle: SxProps = {
+  border: "1px solid black",
+  borderRadius: "16px",
+  padding: "4px 8px",
+};

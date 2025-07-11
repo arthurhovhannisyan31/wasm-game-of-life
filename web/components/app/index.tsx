@@ -7,12 +7,14 @@ import { useInitSW } from "hooks/useInitSW";
 import { useInitWasm } from "hooks/useInitWasm";
 
 import { CELL_SIZE, RENDER_PER_SECOND_RATE } from "./constants";
-import { drawCells, drawGrid } from "./helpers";
+import { drawCells, drawGrid, FPS, FPSProps, fpsPropsInitState } from "./helpers";
 import {
-  buttonsContainerStyles,
   containerStyles,
   contentStyles,
-  controlsContainerStyles, emptyCheckboxContainerStyles, sliderMarks,
+  controlsContainerStyles,
+  emptyCheckboxContainerStyles,
+  fpsStyle,
+  sliderMarks,
   sliderStyles
 } from "./styles";
 import { Universe } from "../../../wasm-pkg";
@@ -20,6 +22,7 @@ import { Universe } from "../../../wasm-pkg";
 let count = 0;
 /* requestAnimationFrame catches the old version of the function and avoids new */
 let rpsValue = RENDER_PER_SECOND_RATE;
+const fpsCount = new FPS();
 
 export const App = () => {
   const wasmConfig = useInitWasm();
@@ -28,6 +31,7 @@ export const App = () => {
   const [play, setPlay] = useState(false);
   const [rps, setRps] = useState(rpsValue);
   const [empty, setEmpty] = useState(false);
+  const [fpsProps, setFpsProps] = useState<FPSProps>(fpsPropsInitState);
 
   const animationId = useRef<number>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -56,6 +60,8 @@ export const App = () => {
 
   const renderLoop = useCallback(() => {
     count++;
+    setFpsProps(fpsCount.render());
+
     const skipCount = Math.ceil(RENDER_PER_SECOND_RATE / rpsValue);
 
     if (universe && count >= skipCount) {
@@ -165,7 +171,7 @@ export const App = () => {
     <Layout>
       <Box sx={containerStyles}>
         <Box sx={controlsContainerStyles}>
-          <Box sx={buttonsContainerStyles}>
+          <Box display="flex" gap="16px" justifyContent="space-between">
             <Button
               onClick={togglePlay}
               variant="contained"
@@ -181,32 +187,57 @@ export const App = () => {
             >
               Reset
             </Button>
+
           </Box>
-          <Stack alignItems="center">
-            <Typography gutterBottom>
-              Renders per second rate
+          <Box display="flex" gap="16px" justifyContent="space-between">
+            <Typography sx={fpsStyle}>
+              FPS:
+              {" "}
+              {fpsProps.latest}
             </Typography>
-            <Slider
-              min={0}
-              max={60}
-              step={null}
-              value={rps}
-              onChange={handleRpsChange}
-              sx={sliderStyles}
-              marks={sliderMarks}
-              valueLabelDisplay="auto"
+            <Typography sx={fpsStyle}>
+              Average:
+              {" "}
+              {fpsProps.avg}
+            </Typography>
+            <Typography sx={fpsStyle}>
+              Min:
+              {" "}
+              {fpsProps.min}
+            </Typography>
+            <Typography sx={fpsStyle}>
+              Max:
+              {" "}
+              {fpsProps.max}
+            </Typography>
+          </Box>
+          <Box display="flex" gap="16px" justifyContent="space-between">
+            <FormControlLabel
+              style={emptyCheckboxContainerStyles}
+              control={(
+                <Checkbox
+                  value={empty}
+                  onChange={handleChangeCheckbox}
+                />
+              )}
+              label="Empty canvas"
             />
-          </Stack>
-          <FormControlLabel
-            style={emptyCheckboxContainerStyles}
-            control={(
-              <Checkbox
-                value={empty}
-                onChange={handleChangeCheckbox}
+            <Stack alignItems="center">
+              <Typography gutterBottom>
+                Renders per second rate
+              </Typography>
+              <Slider
+                min={0}
+                max={60}
+                step={null}
+                value={rps}
+                onChange={handleRpsChange}
+                sx={sliderStyles}
+                marks={sliderMarks}
+                valueLabelDisplay="auto"
               />
-            )}
-            label="Empty canvas"
-          />
+            </Stack>
+          </Box>
           <Alert severity="info">
             Use `shift + click` to land a
             <a
