@@ -5,7 +5,10 @@ name = "wasm-game-of-life"
 version = "0.1.0"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = [
+  "cdylib",
+  "rlib"
+]
 
 [features]
 default = ["console_error_panic_hook"]

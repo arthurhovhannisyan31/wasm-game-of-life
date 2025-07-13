@@ -9,7 +9,8 @@ export const containerStyles: SxProps = {
   gap: "16px",
   height: "100%",
   alignItems: "center",
-  justifyContent: "center"
+  justifyContent: "flex-start",
+  marginTop: "40px"
 };
 
 export const contentStyles: SxProps = {
@@ -61,4 +62,13 @@ export const sliderMarks: Mark[] = [{
 export const emptyCheckboxContainerStyles: CSSProperties = {
   display: "flex",
   justifyContent: "center"
+};
+
+export const fpsContainerStyles: SxProps = {
+  display: "flex",
+  gap: "8px",
+  justifyContent: "space-between",
+  border: "1px solid black",
+  borderRadius: "6px",
+  padding: "0 4px",
 };
