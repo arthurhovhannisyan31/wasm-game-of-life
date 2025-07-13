@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type ChangeEvent } from "react";
 
-import { Box, Button, Stack, Slider, Typography, Alert, FormControlLabel, Checkbox } from "@mui/material";
+import { Box, Button, Stack, Slider, Typography, Alert, FormControlLabel, Checkbox, TextField } from "@mui/material";
 
 import { Layout } from "components/layout";
 import { useInitSW } from "hooks/useInitSW";
 import { useInitWasm } from "hooks/useInitWasm";
 
-import { CELL_SIZE, RENDER_PER_SECOND_RATE } from "./constants";
+import { CELL_SIZE, GRID_SIZE, RENDER_PER_SECOND_RATE } from "./constants";
 import { drawCells, drawGrid, FPS, FPSProps, fpsPropsInitState } from "./helpers";
 import {
   containerStyles,
   contentStyles,
   controlsContainerStyles,
   emptyCheckboxContainerStyles,
+  fpsContainerStyles,
   sliderMarks,
   sliderStyles
 } from "./styles";
@@ -31,6 +32,8 @@ export const App = () => {
   const [rps, setRps] = useState(rpsValue);
   const [empty, setEmpty] = useState(false);
   const [fpsProps, setFpsProps] = useState<FPSProps>(fpsPropsInitState);
+  const [gridSize, setGridSize] = useState(GRID_SIZE);
+  const [cellSize, setCellSize] = useState(CELL_SIZE);
 
   const animationId = useRef<number>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,8 +46,8 @@ export const App = () => {
 
     if (!ctx) return;
 
-    drawGrid(ctx, universe.width(), universe.height());
-  }, [universe, wasmConfig?.memory]);
+    drawGrid(ctx, universe.width(), universe.height(), cellSize);
+  }, [cellSize, universe, wasmConfig?.memory]);
 
   const handleDrawCells = useCallback(() => {
     if (!canvasRef.current || !universe || !wasmConfig?.memory) {
@@ -54,8 +57,8 @@ export const App = () => {
 
     if (!ctx) return;
 
-    drawCells(ctx, universe.cells(), wasmConfig.memory, universe.width(), universe.height());
-  }, [universe, wasmConfig?.memory]);
+    drawCells(ctx, universe.cells(), wasmConfig.memory, universe.width(), universe.height(), cellSize);
+  }, [cellSize, universe, wasmConfig?.memory]);
 
   const renderLoop = useCallback(() => {
     count++;
@@ -88,8 +91,8 @@ export const App = () => {
     const canvasLeft = (e.clientX - boundingRect.left) * scaleX;
     const canvasTop = (e.clientY - boundingRect.top) * scaleY;
 
-    const row = Math.floor(canvasTop / (CELL_SIZE + 1));
-    const col = Math.floor(canvasLeft / (CELL_SIZE + 1));
+    const row = Math.floor(canvasTop / (cellSize + 1));
+    const col = Math.floor(canvasLeft / (cellSize + 1));
 
     if (e.shiftKey) {
       universe.set_glider(col, row);
@@ -100,14 +103,14 @@ export const App = () => {
     handleDrawCells();
   };
 
-  const handleCanvasReset = () => {
+  const handleCanvasReset = (gridSize: number) => () => {
     setPlay(false);
 
     if (animationId.current) {
       cancelAnimationFrame(animationId.current);
     }
 
-    setUniverse(wasmConfig?.module?.Universe.new(empty));
+    setUniverse(wasmConfig?.module?.Universe.new(empty, gridSize));
   };
 
   const start = () => {
@@ -138,18 +141,42 @@ export const App = () => {
     setEmpty(event.target.checked);
   };
 
+  const handleSetGridSize = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const val = +e.target.value;
+    if (!Number.isFinite(val) || val === 0) {
+      return;
+    }
+
+    setGridSize(val);
+    handleCanvasReset(val)();
+  };
+
+  const handleSetCellSize = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const val = +e.target.value;
+    if (!Number.isFinite(val) || val === 0) {
+      return;
+    }
+
+    setCellSize(val);
+    handleCanvasReset(gridSize)();
+  };
+
   useEffect(() => {
     if (canvasRef.current && universe) {
-      canvasRef.current.height = (CELL_SIZE + 1) * universe.height() + 1;
-      canvasRef.current.width = (CELL_SIZE + 1) * universe.width() + 1;
+      canvasRef.current.height = (cellSize + 1) * universe.height() + 1;
+      canvasRef.current.width = (cellSize + 1) * universe.width() + 1;
     }
-  }, [universe]);
+  }, [cellSize, universe]);
 
   useEffect(() => {
     if (wasmConfig?.module && !universe) {
-      setUniverse(wasmConfig?.module.Universe.new());
+      setUniverse(wasmConfig?.module.Universe.new(empty, gridSize));
     }
-  }, [empty, universe, wasmConfig?.module]);
+  }, [empty, universe, wasmConfig?.module, gridSize]);
 
   useEffect(() => {
     handleDrawGrid();
@@ -180,15 +207,32 @@ export const App = () => {
               {play ? "Stop" : "Play"}
             </Button>
             <Button
-              onClick={handleCanvasReset}
+              onClick={handleCanvasReset(gridSize)}
               variant="contained"
               color="info"
             >
               Reset
             </Button>
-
+            <TextField
+              style={{
+                width: "90px"
+              }}
+              label="Grid size"
+              type="number"
+              value={gridSize}
+              onChange={handleSetGridSize}
+            />
+            <TextField
+              style={{
+                width: "90px"
+              }}
+              label="Cell size"
+              type="number"
+              value={cellSize}
+              onChange={handleSetCellSize}
+            />
           </Box>
-          <Box display="flex" gap="8px" justifyContent="space-between">
+          <Box sx={fpsContainerStyles}>
             <Typography>
               FPS:
             </Typography>
@@ -226,7 +270,7 @@ export const App = () => {
             />
             <Stack alignItems="center">
               <Typography gutterBottom>
-                Renders per second rate
+                Renders per second
               </Typography>
               <Slider
                 min={0}

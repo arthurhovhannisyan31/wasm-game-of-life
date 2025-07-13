@@ -1,24 +1,25 @@
-import { ALIVE_COLOR, CELL_SIZE, DEAD_COLOR, GRID_COLOR } from "./constants";
+import { ALIVE_COLOR, DEAD_COLOR, GRID_COLOR } from "./constants";
 import { Cell } from "../../../wasm-pkg";
 
 export const drawGrid = (
   ctx: CanvasRenderingContext2D,
   width: number,
-  height: number
+  height: number,
+  cellSize: number
 ): void => {
   ctx.beginPath();
   ctx.strokeStyle = GRID_COLOR;
 
   // Vertical lines
   for (let i = 0; i <= width; i++) {
-    ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0);
-    ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * height + 1);
+    ctx.moveTo(i * (cellSize + 1) + 1, 0);
+    ctx.lineTo(i * (cellSize + 1) + 1, (cellSize + 1) * height + 1);
   }
 
   // Horizontal lines
   for (let i = 0; i <= height; i++) {
-    ctx.moveTo(0, i * (CELL_SIZE + 1) + 1);
-    ctx.lineTo((CELL_SIZE + 1) * width + 1, i * (CELL_SIZE + 1) + 1);
+    ctx.moveTo(0, i * (cellSize + 1) + 1);
+    ctx.lineTo((cellSize + 1) * width + 1, i * (cellSize + 1) + 1);
   }
 
   ctx.stroke();
@@ -35,25 +36,43 @@ export const drawCells = (
   cellsPtr: number,
   memory: WebAssembly.Memory,
   width: number,
-  height: number
+  height: number,
+  cellSize: number
 ): void => {
   const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
 
   ctx.beginPath();
 
+  ctx.fillStyle = ALIVE_COLOR;
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
       const idx = getIndex(row, width, col);
-
-      ctx.fillStyle = (cells[idx] as Cell) === Cell.Dead
-        ? DEAD_COLOR
-        : ALIVE_COLOR;
+      if (cells[idx] !== Cell.Alive) {
+        continue;
+      }
 
       ctx.fillRect(
-        col * (CELL_SIZE + 1) + 1,
-        row * (CELL_SIZE + 1) + 1,
-        CELL_SIZE,
-        CELL_SIZE
+        col * (cellSize + 1) + 1,
+        row * (cellSize + 1) + 1,
+        cellSize,
+        cellSize
+      );
+    }
+  }
+
+  ctx.fillStyle = DEAD_COLOR;
+  for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
+      const idx = getIndex(row, width, col);
+      if (cells[idx] !== Cell.Dead) {
+        continue;
+      }
+
+      ctx.fillRect(
+        col * (cellSize + 1) + 1,
+        row * (cellSize + 1) + 1,
+        cellSize,
+        cellSize
       );
     }
   }
