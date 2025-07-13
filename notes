@@ -1,3 +1,17 @@
 - add wasm-pack tests to CI
 - add test files from wasm-pack-template
 wasm-pack test --headless --firefox
+
+# run benchmarks
+# https://rustwasm.github.io/docs/book/game-of-life/time-profiling.html#growing-our-game-of-life-universe
+# disable all wasm related imports like bingen, logs, macros, JS or DOM bindings
+
+cargo bench | tee before.txt
+cargo bench | tee after.txt
+cargo benchcmp before.txt after.txt
+
+
+???
+sudo perf record -g target/release/deps/wasm_game_of_life-f9b5ece6c1b6554b --bench
+sudo perf report --input=perf.data
+
