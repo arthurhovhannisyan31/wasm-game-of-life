@@ -1,4 +1,3 @@
-// Uncomment for nightly toolchain
 // #![feature(test)]
 //
 // extern crate test;
@@ -6,7 +5,7 @@
 //
 // #[bench]
 // fn universe_ticks(b: &mut test::Bencher) {
-//   let mut universe = wasm_game_of_life::Universe::new(None, None);
+//   let mut universe = wasm_game_of_life::Universe::new(None, Some(500));
 //
 //   b.iter(|| {
 //     universe.tick();

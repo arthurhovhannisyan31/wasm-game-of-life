@@ -46,6 +46,7 @@ pub struct Universe {
   width: u32,
   height: u32,
   cells: Vec<Cell>,
+  cells_temp: Vec<Cell>,
 }
 
 impl Universe {
@@ -105,6 +106,8 @@ impl Universe {
       let idx = self.get_index(row, col);
       self.cells[idx] = Cell::Alive;
     }
+
+    self.cells_temp.copy_from_slice(&self.cells);
   }
 }
 
@@ -120,8 +123,8 @@ impl Universe {
     let rand = js_sys::Math::random;
     let mut count = 0;
 
-    let cells = (0..width * height)
-      .map(|_| {
+    let cells: Vec<Cell> = (0..width * height)
+      .map(|val| {
         if blanc {
           return Cell::Dead;
         }
@@ -141,6 +144,7 @@ impl Universe {
     Universe {
       width,
       height,
+      cells_temp: cells.clone(),
       cells,
     }
   }
@@ -149,11 +153,6 @@ impl Universe {
   }
   pub fn tick(&mut self) {
     // let _t = Timer::new("Universe::tick");
-
-    let mut next = {
-      // let _t = Timer::new("Allocate next cells");
-      self.cells.clone()
-    };
 
     {
       // let _t = Timer::new("new generation");
@@ -177,13 +176,13 @@ impl Universe {
             (otherwise, _) => otherwise,
           };
 
-          next[idx] = next_cell;
+          self.cells_temp[idx] = next_cell;
         }
       }
     }
 
     // let _t = Timer::new("free old cells");
-    self.cells = next;
+    self.cells.copy_from_slice(&self.cells_temp);
   }
   pub fn width(&self) -> u32 {
     self.width
@@ -198,14 +197,17 @@ impl Universe {
     let idx = self.get_index(row, col);
 
     self.cells[idx].toggle();
+    self.cells_temp.copy_from_slice(&self.cells);
   }
   pub fn set_width(&mut self, width: u32) {
     self.width = width;
     self.cells = (0..width * self.height).map(|_i| Cell::Dead).collect();
+    self.cells_temp.copy_from_slice(&self.cells);
   }
   pub fn set_height(&mut self, height: u32) {
     self.height = height;
     self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
+    self.cells_temp.copy_from_slice(&self.cells);
   }
   pub fn set_glider(&mut self, col: u32, row: u32) {
     let glider_shape: Vec<(u32, u32)> = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
@@ -218,6 +220,7 @@ impl Universe {
 
       self.cells[idx] = Cell::Alive;
     });
+    self.cells_temp.copy_from_slice(&self.cells);
   }
 }
 
