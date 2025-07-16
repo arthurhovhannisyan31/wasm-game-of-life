@@ -2,7 +2,10 @@
   <h1><code>wasm-game-of-life</code></h1><sub>Built with 🦀🕸⚛️</sub>
 </div>
 
-![Vercel](https://vercelbadge.vercel.app/api/arthurhovhannisyan31/wasm-game-of-life?style=for-the-badge)
+
+
+[![Vercel](https://vercelbadge.vercel.app/api/arthurhovhannisyan31/wasm-game-of-life?style=for-the-badge)](https://vercel.com/arthurhovhannisyan31s-projects/wasm-game-of-life/deployments)
+[![Validate Code](https://github.com/arthurhovhannisyan31/wasm-game-of-life/actions/workflows/code-validation.yml/badge.svg?branch=main)](https://github.com/arthurhovhannisyan31/wasm-game-of-life/actions/workflows/code-validation.yml)
 
 ## Overview
 
