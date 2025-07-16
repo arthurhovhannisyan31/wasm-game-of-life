@@ -7,6 +7,10 @@ use utils::set_panic_hook;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 pub struct Timer<'a> {
   name: &'a str,
 }
