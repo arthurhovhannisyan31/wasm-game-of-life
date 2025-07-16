@@ -124,7 +124,7 @@ impl Universe {
     let mut count = 0;
 
     let cells: Vec<Cell> = (0..width * height)
-      .map(|val| {
+      .map(|_| {
         if blanc {
           return Cell::Dead;
         }
@@ -202,12 +202,12 @@ impl Universe {
   pub fn set_width(&mut self, width: u32) {
     self.width = width;
     self.cells = (0..width * self.height).map(|_i| Cell::Dead).collect();
-    self.cells_temp.copy_from_slice(&self.cells);
+    self.cells_temp = self.cells.clone();
   }
   pub fn set_height(&mut self, height: u32) {
     self.height = height;
     self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
-    self.cells_temp.copy_from_slice(&self.cells);
+    self.cells_temp = self.cells.clone();
   }
   pub fn set_glider(&mut self, col: u32, row: u32) {
     let glider_shape: Vec<(u32, u32)> = [(0, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
@@ -235,7 +235,7 @@ impl fmt::Display for Universe {
     for line in self.cells.as_slice().chunks(self.width as usize) {
       for &cell in line {
         let symbol = if cell == Cell::Dead { '◻' } else { '◼' };
-        write!(f, "{}", format!("{symbol}").as_str())?;
+        write!(f, "{symbol}")?;
       }
 
       writeln!(f).expect("Failed writing message");

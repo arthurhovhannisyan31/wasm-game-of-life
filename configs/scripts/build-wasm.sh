@@ -15,4 +15,4 @@ echo Build wasm-pkg
 wasm-pack build \
           --quiet \
           --out-dir wasm-pkg \
-          --release
+          --release # dev profiling release
