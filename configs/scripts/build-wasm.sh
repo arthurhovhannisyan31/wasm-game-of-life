@@ -16,3 +16,7 @@ wasm-pack build \
           --quiet \
           --out-dir wasm-pkg \
           --release # dev profiling release
+
+
+#cargo build --release --target wasm32-unknown-unknown
+#wasm-bindgen target/wasm32-unknown-unknown/release/wasm_game_of_life.wasm --out-dir ./wasm-pkg-2/

@@ -1,12 +1,12 @@
 {
-  "00ac19f6684e84b42cf0.main.js.LICENSE.txt": {
-    "path": "00ac19f6684e84b42cf0.main.js.LICENSE.txt",
-    "size": 1696,
+  "475813f662164f5ab3f7.module.wasm": {
+    "path": "475813f662164f5ab3f7.module.wasm",
+    "size": 23256,
     "prefetch": false
   },
-  "57bed49b04d6050291d1.module.wasm": {
-    "path": "57bed49b04d6050291d1.module.wasm",
-    "size": 29811,
+  "998f374e8e8496689426.main.js.LICENSE.txt": {
+    "path": "998f374e8e8496689426.main.js.LICENSE.txt",
+    "size": 1696,
     "prefetch": false
   },
   "favicon.ico": {
@@ -20,8 +20,8 @@
     "prefetch": false
   },
   "main.js": {
-    "path": "00ac19f6684e84b42cf0.main.js",
-    "size": 377736,
+    "path": "998f374e8e8496689426.main.js",
+    "size": 452848,
     "prefetch": false
   }
 }

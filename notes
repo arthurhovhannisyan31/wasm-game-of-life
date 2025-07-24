@@ -1,6 +1,10 @@
 update Readme
 
-# run benchmarks
+# Build without wasm-pack
+cargo build --release --target wasm32-unknown-unknown
+wasm-bindgen target/wasm32-unknown-unknown/release/wasm_game_of_life.wasm --out-dir ./wasm-pkg-2/
+
+# Run benchmarks
 # https://rustwasm.github.io/docs/book/game-of-life/time-profiling.html#growing-our-game-of-life-universe
 # disable all wasm related imports like bingen, logs, macros, JS or DOM bindings
 
