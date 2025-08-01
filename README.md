@@ -10,12 +10,26 @@
 ## Overview
 
 ___
-...
+This is an implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in Rust and
+WebAssembly.
+
+![img.png](static/images/game-view.png)
 
 ## Credits
 
 ___
-Based on [Rust and WebAssembly](https://rustwasm.github.io/docs/book/introduction.html) book.
+Based on [Rust and WebAssembly](https://rustwasm.github.io/docs/book/introduction.html)
+book's [tutorial](https://rustwasm.github.io/docs/book/game-of-life/introduction.html).
+
+## Stack
+
+___
+
+- [wasm-pack](https://rustwasm.github.io/)
+- [Webpack](https://webpack.js.org/)
+- [React](https://react.dev/)
+- [Typescript](https://www.typescriptlang.org/)
+- [MUI](https://mui.com/)
 
 ## License
 
