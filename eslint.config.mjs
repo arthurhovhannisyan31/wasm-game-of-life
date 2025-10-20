@@ -2,13 +2,12 @@
 
 import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
-// eslint-disable-next-line import/no-unresolved
 import tsParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";
 import pluginReact from "eslint-plugin-react";
+// eslint-disable-next-line import/default
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
-// eslint-disable-next-line import/no-unresolved
 import tseslint from "typescript-eslint";
 
 const languageOptionsConfig = {

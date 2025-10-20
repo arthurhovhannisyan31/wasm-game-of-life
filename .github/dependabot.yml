@@ -1,8 +1,29 @@
 version: 2
+registries:
+  yarn-github:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.NODE_AUTH_TOKEN }}
 updates:
-- package-ecosystem: cargo
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "08:00"
-  open-pull-requests-limit: 2
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 2
+    cooldown:
+      default-days: 5
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+  - package-ecosystem: npm
+    registries:
+      - yarn-github
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 2
+    cooldown:
+      default-days: 5
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3

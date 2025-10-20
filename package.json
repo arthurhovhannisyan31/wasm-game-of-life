@@ -1,6 +1,6 @@
 {
   "name": "wasm-game-of-life",
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.10.3",
   "engines": {
     "node": "^22.9.0"
   },
