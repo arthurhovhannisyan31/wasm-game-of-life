@@ -51,7 +51,7 @@
     "dotenv": "^17.0.1",
     "eslint": "^9.30.1",
     "eslint-config-next": "^15.3.4",
-    "eslint-import-resolver-typescript": "^3.8.3",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-deprecate": "^0.8.7",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-import-newlines": "^1.4.0",
