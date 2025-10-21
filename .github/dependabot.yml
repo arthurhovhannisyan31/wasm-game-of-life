@@ -4,26 +4,58 @@ registries:
     type: npm-registry
     url: https://npm.pkg.github.com
     token: ${{ secrets.NODE_AUTH_TOKEN }}
+
 updates:
   - package-ecosystem: cargo
+    target-branch: "main"
+    pull-request-branch-name:
+      separator: "-"
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
     open-pull-requests-limit: 2
     cooldown:
       default-days: 5
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
+
   - package-ecosystem: npm
+    target-branch: "main"
+    pull-request-branch-name:
+      separator: "-"
     registries:
       - yarn-github
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
     open-pull-requests-limit: 2
     cooldown:
       default-days: 5
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      development:
+        applies-to: version-updates
+        patterns:
+          - "webpack*"
+          - "typescript*"
+          - "@types*"
+          - "*loader"
+          - "nodemon"
+          - "*plugin*"
+          - "eslint*"
+          - "dotenv"
+      ui-lib-patch:
+        applies-to: version-updates
+        patterns:
+          - "@arthurhovhannisyan31"
+          - "@emotion"
+          - "@mui"
+          - "lodash*"
+          - "react*"
