@@ -27,3 +27,27 @@ updates:
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      development:
+        applies-to: version-updates
+        patterns:
+          - "webpack*"
+          - "typescript*"
+          - "@types*"
+          - "*loader"
+          - "nodemon"
+          - "*plugin*"
+          - "eslint*"
+          - "dotenv"
+      ui-lib:
+        applies-to: version-updates
+        patterns:
+          - "@arthurhovhannisyan31"
+          - "@emotion"
+          - "@mui"
+          - "lodash*"
+          - "react*"
