@@ -6,6 +6,11 @@ registries:
     token: ${{ secrets.NODE_AUTH_TOKEN }}
 
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
   - package-ecosystem: cargo
     target-branch: "main"
     pull-request-branch-name:
