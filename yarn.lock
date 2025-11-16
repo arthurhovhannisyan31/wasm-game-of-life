@@ -771,7 +771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/types@npm:^7.4.4, @mui/types@npm:^7.4.6, @mui/types@npm:^7.4.7":
+"@mui/types@npm:^7.4.6, @mui/types@npm:^7.4.7":
   version: 7.4.7
   resolution: "@mui/types@npm:7.4.7"
   dependencies:
@@ -782,6 +782,20 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/a3636f2b39e69502867d460e9a571b0070bdc8df4c5ffd4e9078a908176f968800e809b4a708ba630957b6635535be2e21fa1734c684825dc857642a31c3a94d
+  languageName: node
+  linkType: hard
+
+"@mui/types@npm:^7.4.8":
+  version: 7.4.8
+  resolution: "@mui/types@npm:7.4.8"
+  dependencies:
+    "@babel/runtime": "npm:^7.28.4"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/f54d8ab787053170d43567f90cd7605e872362d95a5610382382dbf834d8890687ee4d05df604c00b77dea2b35a99ab51af073d115627aa8f401fd3340f48e84
   languageName: node
   linkType: hard
 
@@ -7705,7 +7719,7 @@ __metadata:
     "@mui/material": "npm:^7.2.0"
     "@mui/styled-engine": "npm:^7.2.0"
     "@mui/system": "npm:^7.2.0"
-    "@mui/types": "npm:^7.4.4"
+    "@mui/types": "npm:^7.4.8"
     "@stylistic/eslint-plugin": "npm:^5.1.0"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/node": "npm:^24.0.10"
