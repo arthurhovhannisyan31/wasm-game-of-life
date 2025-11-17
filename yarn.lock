@@ -720,6 +720,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/private-theming@npm:^7.3.5":
+  version: 7.3.5
+  resolution: "@mui/private-theming@npm:7.3.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.28.4"
+    "@mui/utils": "npm:^7.3.5"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/dc2dfcc61e2cf36b86f5ed5b81f0e8b511feb45ac29f77a5983a8a8f19f30cbe27564a465a247e3b4bf4428f28a48c0130409f1d764b4d0a47aa415d04ea24f3
+  languageName: node
+  linkType: hard
+
 "@mui/styled-engine@npm:^7.2.0, @mui/styled-engine@npm:^7.3.3":
   version: 7.3.3
   resolution: "@mui/styled-engine@npm:7.3.3"
@@ -743,7 +760,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^7.2.0, @mui/system@npm:^7.3.2, @mui/system@npm:^7.3.3":
+"@mui/styled-engine@npm:^7.3.5":
+  version: 7.3.5
+  resolution: "@mui/styled-engine@npm:7.3.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.28.4"
+    "@emotion/cache": "npm:^11.14.0"
+    "@emotion/serialize": "npm:^1.3.3"
+    "@emotion/sheet": "npm:^1.4.0"
+    csstype: "npm:^3.1.3"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    "@emotion/react": ^11.4.1
+    "@emotion/styled": ^11.3.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+  checksum: 10/113cdaefcb9d14d8397b43fcc814eb1a5369620117c256f1ef89f5d108518233959ca16861e134e4a2184c50701c3d680bdc7f2f601c103eedb9e11c59c7ea6c
+  languageName: node
+  linkType: hard
+
+"@mui/system@npm:^7.3.2, @mui/system@npm:^7.3.3":
   version: 7.3.3
   resolution: "@mui/system@npm:7.3.3"
   dependencies:
@@ -768,6 +808,34 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/6de9774af30f802b7b59bed81131c38ae77a7c1fbc4a8977d8d33799d29ebe92ec1c2fb58b9c4d990fc86a12997e0676752ce4935abaf78622041b383938b1b2
+  languageName: node
+  linkType: hard
+
+"@mui/system@npm:^7.3.5":
+  version: 7.3.5
+  resolution: "@mui/system@npm:7.3.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.28.4"
+    "@mui/private-theming": "npm:^7.3.5"
+    "@mui/styled-engine": "npm:^7.3.5"
+    "@mui/types": "npm:^7.4.8"
+    "@mui/utils": "npm:^7.3.5"
+    clsx: "npm:^2.1.1"
+    csstype: "npm:^3.1.3"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    "@emotion/react": ^11.5.0
+    "@emotion/styled": ^11.3.0
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    "@types/react":
+      optional: true
+  checksum: 10/bf6677e8b240a1a6a76d3ca5525cbf68bc746a8fb93832b70704a57d7315bb65fa5c8e7089120334e0690f8740bb1a499e5add211d447b92b2834e22a5449e59
   languageName: node
   linkType: hard
 
@@ -816,6 +884,26 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/6309f1eab55487cd653d110fbe51fd102608724ba893d58076474126ccbbfa36e0b2843f1fd99be33ea534b284ab5d546563f03b5f43e509afe62ba93ba76951
+  languageName: node
+  linkType: hard
+
+"@mui/utils@npm:^7.3.5":
+  version: 7.3.5
+  resolution: "@mui/utils@npm:7.3.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.28.4"
+    "@mui/types": "npm:^7.4.8"
+    "@types/prop-types": "npm:^15.7.15"
+    clsx: "npm:^2.1.1"
+    prop-types: "npm:^15.8.1"
+    react-is: "npm:^19.2.0"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/3d5a764dbb92b052b7551188c6e2a72c8917c7b77e62d985306fc2a1877a19777d0fcbe5d8a94c1c5c79c0e94de2a157bb7482b3ad0a7abda58195bf45bdbcf5
   languageName: node
   linkType: hard
 
@@ -6228,7 +6316,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.1.1":
+"react-is@npm:^19.1.1, react-is@npm:^19.2.0":
   version: 19.2.0
   resolution: "react-is@npm:19.2.0"
   checksum: 10/5cf0230571da0b446c64c0ff7b0e6992b7a8b12b39542db4003de1611e3f108e26f30b93a85ded5cd89c5bcce97f57639524ae40e57bb2f4f1ebd0935b624abf
@@ -7718,7 +7806,7 @@ __metadata:
     "@mui/lab": "npm:^7.0.0-beta.14"
     "@mui/material": "npm:^7.2.0"
     "@mui/styled-engine": "npm:^7.2.0"
-    "@mui/system": "npm:^7.2.0"
+    "@mui/system": "npm:^7.3.5"
     "@mui/types": "npm:^7.4.8"
     "@stylistic/eslint-plugin": "npm:^5.1.0"
     "@types/lodash-es": "npm:^4.17.12"
