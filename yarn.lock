@@ -737,7 +737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styled-engine@npm:^7.2.0, @mui/styled-engine@npm:^7.3.3":
+"@mui/styled-engine@npm:^7.3.3":
   version: 7.3.3
   resolution: "@mui/styled-engine@npm:7.3.3"
   dependencies:
@@ -7805,7 +7805,7 @@ __metadata:
     "@mui/icons-material": "npm:^7.3.5"
     "@mui/lab": "npm:^7.0.0-beta.14"
     "@mui/material": "npm:^7.3.5"
-    "@mui/styled-engine": "npm:^7.2.0"
+    "@mui/styled-engine": "npm:^7.3.5"
     "@mui/system": "npm:^7.3.5"
     "@mui/types": "npm:^7.4.8"
     "@stylistic/eslint-plugin": "npm:^5.1.0"
