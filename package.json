@@ -31,8 +31,8 @@
     "@mui/system": "^7.3.5",
     "@mui/types": "^7.4.8",
     "lodash-es": "^4.17.21",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@eslint/compat": "^1.4.1",
